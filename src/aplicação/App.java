@@ -34,7 +34,7 @@ public class App {
 					if (pos != -1) {
 						System.out.println("Quarto não disponível para reserva, informe novamente:");
 					}
-				} while (pos != -1); //validação para não entrar número repetido
+				} while (pos != -1); // validação para não entrar número repetido
 
 				System.out.print("Nome: ");
 				sc.nextLine();
@@ -70,13 +70,7 @@ public class App {
 				break;
 
 			case 5:
-				if (reserva.getLista().size() == 0) {
-					System.out.println("Nenhuma reserva cadastrada");
-				} else {
-					for (Reserva r : reserva.getLista()) {
-						System.out.println(r);
-					}
-				}
+				reserva.retornaLista();
 				break;
 
 			case 6:
