@@ -1,8 +1,12 @@
 package aplicação;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-import entidades.Reserva;
+import entidades.Cliente;
+import entidades.Ocupacao;
+import entidades.auxiliares.OcupacaoAuxiliar;
 
 public class App {
 
@@ -11,9 +15,9 @@ public class App {
 		Scanner sc = new Scanner(System.in);
 
 		int op, num, pos;
-		String nome = "";
+		String nome, telefone, CPF, tempo;
 
-		Reserva reserva = new Reserva();
+		List<Ocupacao> lista = new ArrayList<>();
 
 		do {
 
@@ -30,7 +34,7 @@ public class App {
 				do {
 					System.out.print("Número do quarto: ");
 					num = sc.nextInt();
-					pos = reserva.buscarReserva(num);
+					pos = OcupacaoAuxiliar.buscarReserva(num, lista);
 					if (pos != -1) {
 						System.out.println("Quarto não disponível para reserva, informe novamente:");
 					}
@@ -40,24 +44,29 @@ public class App {
 				sc.nextLine();
 				nome = sc.nextLine();
 				System.out.print("Telefone: ");
-				String telefone = sc.nextLine();
-				reserva.adicionarReserva(num, nome, telefone);
+				telefone = sc.nextLine();
+				System.out.print("CPF: ");
+				CPF = sc.nextLine();
+				System.out.print("Tempo de ocupação: ");
+				tempo = sc.nextLine();
+				OcupacaoAuxiliar.adicionarReserva(num, new Cliente(nome, telefone, CPF), tempo, lista);
+
 				break;
 
 			case 2:
 				System.out.print("Informe o número do quarto: ");
 				num = sc.nextInt();
-				reserva.removerReserva(num);
+				OcupacaoAuxiliar.removerReserva(num, lista);
 				break;
 
 			case 3:
 				System.out.print("Informe o número do quarto: ");
 				num = sc.nextInt();
-				pos = reserva.buscarReserva(num);
+				pos = OcupacaoAuxiliar.buscarReserva(num, lista);
 				if (pos == -1) {
 					System.out.println("Nenhuma reserva feita para esse quarto!");
 				} else {
-					System.out.println(reserva.getLista().get(pos));
+					System.out.println(lista.get(pos));
 				}
 				break;
 
@@ -66,11 +75,12 @@ public class App {
 				sc.nextLine();
 				nome = sc.nextLine();
 				System.out.println();
-				System.out.println(reserva.filtroPorNome(nome));
+				System.out.print(OcupacaoAuxiliar.filtroPorNome(nome, lista));
 				break;
 
 			case 5:
-				reserva.retornaLista();
+				OcupacaoAuxiliar.listarReservas(lista);
+
 				break;
 
 			case 6:
