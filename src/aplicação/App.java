@@ -1,21 +1,26 @@
 package aplicação;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-import entidades.Cliente;
 import entidades.Ocupacao;
 import entidades.auxiliares.OcupacaoAuxiliar;
 
 public class App {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParseException {
 
 		Scanner sc = new Scanner(System.in);
 
-		int op, num, pos;
-		String nome, telefone, CPF, tempo;
+		int op, num, pos, tempo;
+		String nome, telefone, CPF;
+		Date data;
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 		List<Ocupacao> lista = new ArrayList<>();
 
@@ -47,10 +52,11 @@ public class App {
 				telefone = sc.nextLine();
 				System.out.print("CPF: ");
 				CPF = sc.nextLine();
-				System.out.print("Tempo de ocupação: ");
-				tempo = sc.nextLine();
-				OcupacaoAuxiliar.adicionarReserva(num, new Cliente(nome, telefone, CPF), tempo, lista);
-
+				System.out.print("Data de entrada (dd/MM/yyyy): ");
+				data = sdf.parse(sc.next());
+				System.out.print("Tempo de ocupação (em dias): ");
+				tempo = sc.nextInt();
+				OcupacaoAuxiliar.adicionarReserva(num, nome, telefone, CPF, tempo, data, lista);
 				break;
 
 			case 2:

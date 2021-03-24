@@ -1,5 +1,6 @@
 package entidades.auxiliares;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,8 +24,9 @@ public class OcupacaoAuxiliar {
 
 	}
 
-	public static void adicionarReserva(int numeroQuarto, Cliente cliente, String tempo, List<Ocupacao> lista) {
-		lista.add(new Ocupacao(numeroQuarto, cliente, tempo));
+	public static void adicionarReserva(int numeroQuarto, String nome, String CPF, String telefone, int tempo,
+			Date data, List<Ocupacao> lista) {
+		lista.add(new Ocupacao(numeroQuarto, new Cliente(nome, telefone, CPF), tempo, data));
 		System.out.println("Reserva cadastrada com sucesso!");
 	}
 
