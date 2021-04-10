@@ -7,8 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-import entidades.Ocupacao;
-import entidades.auxiliares.OcupacaoAuxiliar;
+import entidades.Reserva;
+import entidades.auxiliares.ReservaAuxiliar;
 
 public class App {
 
@@ -16,13 +16,15 @@ public class App {
 
 		Scanner sc = new Scanner(System.in);
 
-		int op, num, pos, tempo;
+		int op, num, pos;
+
 		String nome, telefone, CPF;
-		Date data;
+		Date dataInicio;
+		Date dataFim;
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-		List<Ocupacao> lista = new ArrayList<>();
+		List<Reserva> lista = new ArrayList<>();
 
 		do {
 
@@ -39,7 +41,7 @@ public class App {
 				do {
 					System.out.print("Número do quarto: ");
 					num = sc.nextInt();
-					pos = OcupacaoAuxiliar.buscarReserva(num, lista);
+					pos = ReservaAuxiliar.buscarReserva(num, lista);
 					if (pos != -1) {
 						System.out.println("Quarto não disponível para reserva, informe novamente:");
 					}
@@ -53,22 +55,23 @@ public class App {
 				System.out.print("CPF: ");
 				CPF = sc.nextLine();
 				System.out.print("Data de entrada (dd/MM/yyyy): ");
-				data = sdf.parse(sc.next());
-				System.out.print("Tempo de ocupação (em dias): ");
-				tempo = sc.nextInt();
-				OcupacaoAuxiliar.adicionarReserva(num, nome, telefone, CPF, tempo, data, lista);
+				dataInicio = sdf.parse(sc.next());
+				System.out.print("Data de saída (dd/MM/yyyy): ");
+				dataFim = sdf.parse(sc.next());
+
+				ReservaAuxiliar.adicionarReserva(num, nome, telefone, CPF, dataInicio,dataFim, lista);
 				break;
 
 			case 2:
 				System.out.print("Informe o número do quarto: ");
 				num = sc.nextInt();
-				OcupacaoAuxiliar.removerReserva(num, lista);
+				ReservaAuxiliar.removerReserva(num, lista);
 				break;
 
 			case 3:
 				System.out.print("Informe o número do quarto: ");
 				num = sc.nextInt();
-				pos = OcupacaoAuxiliar.buscarReserva(num, lista);
+				pos = ReservaAuxiliar.buscarReserva(num, lista);
 				if (pos == -1) {
 					System.out.println("Nenhuma reserva feita para esse quarto!");
 				} else {
@@ -81,11 +84,11 @@ public class App {
 				sc.nextLine();
 				nome = sc.nextLine();
 				System.out.println();
-				System.out.print(OcupacaoAuxiliar.filtroPorNome(nome, lista));
+				System.out.print(ReservaAuxiliar.filtroPorNome(nome, lista));
 				break;
 
 			case 5:
-				OcupacaoAuxiliar.listarReservas(lista);
+				ReservaAuxiliar.listarReservas(lista);
 
 				break;
 
