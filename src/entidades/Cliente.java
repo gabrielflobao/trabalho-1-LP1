@@ -13,8 +13,8 @@ public class Cliente extends Pessoa {
 
 	@Override
 	public String toString() {
-		return String.format("%s [nome: %s, telefone: %s, CPF: %s]", this.idCliente, this.getNome(), this.getTelefone(),
-				this.getCPF());
+		return String.format("%s [nome: %s, CPF: %s, telefone: %s]", this.idCliente, this.getNome(), this.getCPF(),
+				this.getTelefone());
 	}
 
 }
