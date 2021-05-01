@@ -1,116 +1,323 @@
 package aplicação;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Scanner;
 
-import entidades.Ocupacao;
-import entidades.auxiliares.OcupacaoAuxiliar;
+import entidades.Cliente;
+import entidades.Reserva;
+import entidades.auxiliares.ClienteAuxiliar;
+import entidades.auxiliares.FuncionarioAuxiliar;
+import entidades.auxiliares.ReservaAuxiliar;
 
 public class App {
 
-	public static void main(String[] args) throws ParseException {
+	static Scanner sc = new Scanner(System.in);
 
-		Scanner sc = new Scanner(System.in);
+	public static void main(String[] args) {
 
-		int op, num, pos, tempo;
-		String nome, telefone, CPF;
-		Date data;
+		int op;
+		boolean sair = false;
 
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		String menu = "1 - Acessar opções sobre reserva\n" + "2 - Acessar opções sobre cliente\n"
+				+ "3 - Acessar opções sobre funcionário\n" + "0 - Finalizar o programa\n" + "Escolha uma opção: ";
 
-		List<Ocupacao> lista = new ArrayList<>();
+		try {
+			do {
 
-		do {
+				System.out.print(menu);
+				op = sc.nextInt();
 
-			System.out.print(menu());
-			op = sc.nextInt();
-
-			System.out.println();
-
-			switch (op) {
-
-			case 1:
-				System.out.println("Informe os dados: ");
-
-				do {
-					System.out.print("Número do quarto: ");
-					num = sc.nextInt();
-					pos = OcupacaoAuxiliar.buscarReserva(num, lista);
-					if (pos != -1) {
-						System.out.println("Quarto não disponível para reserva, informe novamente:");
-					}
-				} while (pos != -1); // validação para não entrar número repetido
-
-				System.out.print("Nome: ");
-				sc.nextLine();
-				nome = sc.nextLine();
-				System.out.print("Telefone: ");
-				telefone = sc.nextLine();
-				System.out.print("CPF: ");
-				CPF = sc.nextLine();
-				System.out.print("Data de entrada (dd/MM/yyyy): ");
-				data = sdf.parse(sc.next());
-				System.out.print("Tempo de ocupação (em dias): ");
-				tempo = sc.nextInt();
-				OcupacaoAuxiliar.adicionarReserva(num, nome, telefone, CPF, tempo, data, lista);
-				break;
-
-			case 2:
-				System.out.print("Informe o número do quarto: ");
-				num = sc.nextInt();
-				OcupacaoAuxiliar.removerReserva(num, lista);
-				break;
-
-			case 3:
-				System.out.print("Informe o número do quarto: ");
-				num = sc.nextInt();
-				pos = OcupacaoAuxiliar.buscarReserva(num, lista);
-				if (pos == -1) {
-					System.out.println("Nenhuma reserva feita para esse quarto!");
-				} else {
-					System.out.println(lista.get(pos));
-				}
-				break;
-
-			case 4:
-				System.out.print("Informe o nome para pesquisar: ");
-				sc.nextLine();
-				nome = sc.nextLine();
 				System.out.println();
-				System.out.print(OcupacaoAuxiliar.filtroPorNome(nome, lista));
-				break;
 
-			case 5:
-				OcupacaoAuxiliar.listarReservas(lista);
+				switch (op) {
 
-				break;
+				case 1:
+					menuReserva();
+					break;
 
-			case 6:
-				System.out.println("Programa finalizado!");
-				break;
+				case 2:
+					menuCliente();
+					break;
 
-			default:
-				System.out.println("Opção inválida!");
-				break;
+				case 3:
+					menuFuncionario();
+					break;
 
-			}
+				case 0:
+					System.out.println("Programa finalizado!");
+					sair = true;
+					break;
 
-			System.out.println();
+				default:
+					System.out.println("Opção inválida!");
+					break;
 
-		} while (op != 6);
+				}
 
-		sc.close();
+			} while (!sair);
+		} catch (Exception e) {
+			System.out.println("ERRO");
+		}
 
 	}
 
-	private static String menu() {
-		return "1 - Adicionar uma nova reserva\n" + "2 - Excluir uma reserva\n"
-				+ "3 - Pesquisar reserva por número de quarto\n" + "4 - Filtrar reservas por nome\n"
-				+ "5 - Lista de reservas\n" + "6 - Finalizar o programa\n" + "Escolha uma opção: ";
+	private static void menuReserva() {
+
+		int op, num, pos;
+		boolean sair = false;
+		String nome, telefone, CPF;
+		Date dataInicio, dataFim;
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+		try {
+			do {
+				System.out.print("1 - Adicionar uma nova reserva\n" + "2 - Excluir uma reserva\n"
+						+ "3 - Listar reservas\n" + "4 - Voltar ao menu principal\n" + "Escolha uma opção: ");
+				op = sc.nextInt();
+
+				System.out.println();
+
+				switch (op) {
+
+				case 1:
+					System.out.println("Informe os dados: ");
+
+					do {
+						System.out.print("Número do quarto: ");
+						num = sc.nextInt();
+						System.out.print("Data de entrada (dd/MM/yyyy): ");
+						dataInicio = sdf.parse(sc.next());
+						pos = ReservaAuxiliar.buscarReservaComData(num, dataInicio);
+						if (pos != -1) {
+							System.out.println("Quarto não disponível para reserva, informe novamente");
+						}
+					} while (pos != -1);
+
+					do {
+						System.out.print("Data de saída (dd/MM/yyyy): ");
+						dataFim = sdf.parse(sc.next());
+						if (dataFim.before(dataInicio)) {
+							System.out.println("Data de saída deve ser igual ou posterior à data de entrada");
+						}
+					} while (dataFim.before(dataInicio));
+
+					System.out.print("Nome: ");
+					sc.nextLine();
+					nome = sc.nextLine();
+					System.out.print("Telefone: ");
+					telefone = sc.nextLine();
+					System.out.print("CPF: ");
+					CPF = sc.nextLine();
+
+					ReservaAuxiliar
+							.adicionarReserva(new Reserva(num, new Cliente(nome, telefone, CPF), dataInicio, dataFim));
+					System.out.println();
+					break;
+
+				case 2:
+					System.out.print("Informe o número do quarto: ");
+					num = sc.nextInt();
+					System.out.print("Informe a data de entrada: ");
+					dataInicio = sdf.parse(sc.next());
+					ReservaAuxiliar.removerReserva(num, dataInicio);
+					System.out.println();
+					break;
+
+				case 3:
+					ReservaAuxiliar.listarReservas();
+					System.out.println();
+					break;
+
+				case 0:
+					sair = true;
+					break;
+
+				default:
+					System.out.println("Opção inválida!");
+					break;
+
+				}
+			} while (!sair);
+
+		} catch (Exception e) {
+			System.out.println("ERRO");
+		}
+
+	}
+
+	private static void menuCliente() {
+
+		int op, pos;
+		boolean sair = false;
+		String nome, telefone, CPF;
+
+		try {
+			do {
+				System.out.print("1 - Cadastrar novo cliente\n" + "2 - Remover cliente\n"
+						+ "3 - Listar todos os clientes\n" + "4 - Buscar cliente por CPF\n"
+						+ "5 - Listar clientes por nome\n" + "0 - Voltar ao menu principal\n" + "Escolha uma opção: ");
+				op = sc.nextInt();
+
+				System.out.println();
+
+				switch (op) {
+				case 1:
+					System.out.println("Informe os dados: ");
+					do {
+						System.out.print("CPF: ");
+						sc.nextLine();
+						CPF = sc.nextLine();
+						pos = ClienteAuxiliar.buscarPorCPF(CPF);
+						if (pos != -1) {
+							System.out.println("CPF já cadastrado como cliente!");
+						}
+					} while (pos != -1);
+					System.out.print("Nome: ");
+					nome = sc.nextLine();
+					System.out.print("Telefone: ");
+					telefone = sc.nextLine();
+
+					ClienteAuxiliar.cadastrar(nome, CPF, telefone);
+					System.out.println("Cliente cadastrado com sucesso!");
+					System.out.println();
+					break;
+
+				case 2:
+					System.out.print("Informe o CPF: ");
+					sc.nextLine();
+					CPF = sc.nextLine();
+					ClienteAuxiliar.remover(CPF);
+					System.out.println();
+					break;
+
+				case 3:
+					ClienteAuxiliar.listarClientes();
+					System.out.println();
+					break;
+
+				case 4:
+					System.out.print("Informe o CPF: ");
+					CPF = sc.next();
+					pos = ClienteAuxiliar.buscarPorCPF(CPF);
+					if (pos != -1) {
+						System.out.println(ClienteAuxiliar.getListaCliente().get(pos));
+					} else {
+						System.out.println("CPF não cadastrado");
+					}
+					System.out.println();
+					break;
+
+				case 5:
+					System.out.print("Informe o nome: ");
+					sc.nextLine();
+					nome = sc.nextLine();
+					System.out.println(ClienteAuxiliar.listarPorNome(nome));
+					break;
+
+				case 0:
+					sair = true;
+					break;
+
+				default:
+					System.out.println("Opção inválida!");
+					break;
+
+				}
+			} while (!sair);
+		} catch (Exception e) {
+			System.out.println("ERRO");
+		}
+
+	}
+
+	private static void menuFuncionario() {
+
+		int op, pos;
+		boolean sair = false;
+		String nome, telefone, CPF;
+
+		try {
+			do {
+
+				System.out.print("1 - Cadastrar novo funcionário\n" + "2 - Remover funcionário\n"
+						+ "3 - Listar todos os funcionários\n" + "4 - Buscar funcionário por CPF\n"
+						+ "5 - Listar funcionários por nome\n" + "0 - Voltar ao menu principal\n"
+						+ "Escolha uma opção: ");
+				op = sc.nextInt();
+
+				System.out.println();
+
+				switch (op) {
+				case 1:
+					System.out.println("Informe os dados: ");
+					do {
+						System.out.print("CPF: ");
+						sc.nextLine();
+						CPF = sc.nextLine();
+						pos = FuncionarioAuxiliar.buscarPorCPF(CPF);
+						if (pos != -1) {
+							System.out.println("CPF já cadastrado como funcionário!");
+						}
+					} while (pos != -1);
+					System.out.print("Nome: ");
+					nome = sc.nextLine();
+					System.out.print("Telefone: ");
+					telefone = sc.nextLine();
+
+					FuncionarioAuxiliar.cadastrar(nome, CPF, telefone);
+					System.out.println("Funcionário cadastrado com sucesso!");
+					System.out.println();
+					break;
+
+				case 2:
+					System.out.print("Informe o CPF: ");
+					sc.nextLine();
+					CPF = sc.nextLine();
+					FuncionarioAuxiliar.remover(CPF);
+					System.out.println();
+					break;
+
+				case 3:
+					FuncionarioAuxiliar.listarFuncionarios();
+					System.out.println();
+					break;
+
+				case 4:
+					System.out.print("Informe o CPF: ");
+					CPF = sc.next();
+					pos = FuncionarioAuxiliar.buscarPorCPF(CPF);
+					if (pos != -1) {
+						System.out.println(FuncionarioAuxiliar.getListaFuncionario().get(pos));
+					} else {
+						System.out.println("CPF não cadastrado");
+					}
+					System.out.println();
+					break;
+
+				case 5:
+					System.out.print("Informe o nome: ");
+					sc.nextLine();
+					nome = sc.nextLine();
+					System.out.println(FuncionarioAuxiliar.listarPorNome(nome));
+					break;
+
+				case 0:
+					sair = true;
+					break;
+
+				default:
+					System.out.println("Opção inválida!");
+					break;
+
+				}
+
+			} while (!sair);
+		} catch (Exception e) {
+			System.out.println("ERRO");
+		}
+
 	}
 
 }

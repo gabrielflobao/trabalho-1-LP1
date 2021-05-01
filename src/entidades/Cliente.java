@@ -1,48 +1,20 @@
 package entidades;
 
-public class Cliente {
+import entidades.enuns.TipoPessoa;
 
-	private String nome;
-	private String telefone;
-	private String CPF;
+public class Cliente extends Pessoa {
 
-	public Cliente() {
+	private TipoPessoa idCliente;
 
-	}
-
-	public Cliente(String nome, String telefone, String CPF) {
-		this.nome = nome;
-		this.telefone = telefone;
-		this.CPF = CPF;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getTelefone() {
-		return telefone;
-	}
-
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
-	}
-
-	public String getCPF() {
-		return CPF;
-	}
-
-	public void setCPF(String CPF) {
-		this.CPF = CPF;
+	public Cliente(String nome, String CPF, String endereco) {
+		super(nome, CPF, endereco);
+		idCliente = TipoPessoa.CLIENTE;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("Cliente [nome: %s, telefone: %s, CPF: %s]", this.nome, this.telefone, this.CPF);
+		return String.format("%s [nome: %s, telefone: %s, CPF: %s]", this.idCliente, this.getNome(), this.getTelefone(),
+				this.getCPF());
 	}
 
 }
