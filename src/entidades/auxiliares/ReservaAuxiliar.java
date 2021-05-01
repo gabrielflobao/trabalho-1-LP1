@@ -10,12 +10,12 @@ import java.util.List;
 
 public class ReservaAuxiliar {
 
-	static List<Reserva> lista = new ArrayList<>();
+	static List<Reserva> listaReserva = new ArrayList<>();
 
 	public static void listarReservas() { // lista todas as reservas
-		Iterator<Reserva> iterador = lista.iterator();
+		Iterator<Reserva> iterador = listaReserva.iterator();
 		Reserva ReservaAux;
-		if (!lista.isEmpty()) {
+		if (!listaReserva.isEmpty()) {
 			while (iterador.hasNext()) {
 				ReservaAux = iterador.next();
 				System.out.print(
@@ -29,15 +29,15 @@ public class ReservaAuxiliar {
 	}
 
 	public static void adicionarReserva(Reserva reserva) { // adiciona nova reserva na lista
-		lista.add(reserva);
+		listaReserva.add(reserva);
 		System.out.println("Reserva cadastrada com sucesso!");
 	}
 
 	public static void removerReserva(int numeroQuarto, Date data) { // remove reserva da lista através de número do
 																		// quarto e data informadas pelo usuário
 		int pos = buscarReserva(numeroQuarto);
-		if (lista.get(pos).getDataInicio().equals(data)) {
-			lista.remove(pos);
+		if (listaReserva.get(pos).getDataInicio().equals(data)) {
+			listaReserva.remove(pos);
 			System.out.println("Reserva removida com sucesso!");
 		} else {
 			System.out.println("Nenhuma reserva feita para esse quarto nesta data!");
@@ -45,8 +45,8 @@ public class ReservaAuxiliar {
 	}
 
 	public static int buscarReserva(int num) { // busca reserva através do número do quarto informado pelo usuário
-		for (int i = 0; i < lista.size(); i++) {
-			if (lista.get(i).getNumeroQuarto() == num) {
+		for (int i = 0; i < listaReserva.size(); i++) {
+			if (listaReserva.get(i).getNumeroQuarto() == num) {
 				return i;
 			}
 		}
@@ -55,10 +55,10 @@ public class ReservaAuxiliar {
 
 	public static int buscarReservaComData(int num, Date data) { // busca reserva através de número do quarto e data
 																	// informados pelo usuário
-		for (int i = 0; i < lista.size(); i++) {
-			if (lista.get(i).getNumeroQuarto() == num) {
-				if ((lista.get(i).getDataInicio().before(data) && lista.get(i).getDataFim().after(data))
-						|| lista.get(i).getDataInicio().equals(data) || lista.get(i).getDataFim().equals(data)) {
+		for (int i = 0; i < listaReserva.size(); i++) {
+			if (listaReserva.get(i).getNumeroQuarto() == num) {
+				if ((listaReserva.get(i).getDataInicio().before(data) && listaReserva.get(i).getDataFim().after(data))
+						|| listaReserva.get(i).getDataInicio().equals(data) || listaReserva.get(i).getDataFim().equals(data)) {
 					return i;
 				}
 
@@ -70,9 +70,9 @@ public class ReservaAuxiliar {
 	public static String listarPorNome(String nome) { // realiza a busca de um nome na lista de reservas e retorna uma
 														// string com todas a reservas que possuírem ele
 		String saida = "";
-		for (int i = 0; i < lista.size(); i++) {
-			if (lista.get(i).getCliente().getNome().equalsIgnoreCase(nome)) {
-				saida += lista.get(i).toString() + "\n\n";
+		for (int i = 0; i < listaReserva.size(); i++) {
+			if (listaReserva.get(i).getCliente().getNome().equalsIgnoreCase(nome)) {
+				saida += listaReserva.get(i).toString() + "\n\n";
 			}
 		}
 
@@ -86,9 +86,9 @@ public class ReservaAuxiliar {
 	public static String listarPorCPF(String CPF) { // realiza a busca de um CPF na lista de reservas e retorna uma
 													// string com todas a reservas que possuírem ele
 		String saida = "";
-		for (int i = 0; i < lista.size(); i++) {
-			if (lista.get(i).getCliente().getCPF().equalsIgnoreCase(CPF)) {
-				saida += lista.get(i).toString() + "\n\n";
+		for (int i = 0; i < listaReserva.size(); i++) {
+			if (listaReserva.get(i).getCliente().getCPF().equalsIgnoreCase(CPF)) {
+				saida += listaReserva.get(i).toString() + "\n\n";
 			}
 		}
 
@@ -102,16 +102,16 @@ public class ReservaAuxiliar {
 	public static void atualizar() { // atualiza a lista de reservas, removendo todas as que a data final for menor
 										// que a data atual
 		Date dataAux = Calendar.getInstance().getTime();
-		for (int i = 0; i < lista.size(); i++) {
-			if (lista.get(i).getDataFim().before(dataAux)) {
-				lista.remove(i);
+		for (int i = 0; i < listaReserva.size(); i++) {
+			if (listaReserva.get(i).getDataFim().before(dataAux)) {
+				listaReserva.remove(i);
 			}
 
 		}
 	}
 
 	public static List<Reserva> getLista() {
-		return lista;
+		return listaReserva;
 	}
 
 }
