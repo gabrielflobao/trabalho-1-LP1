@@ -227,7 +227,7 @@ public class App {
 					} else {
 						System.out.println("CPF não cadastrado");
 					}
-					System.out.println();
+					System.out.println();branch
 					break;
 
 				case 5:
