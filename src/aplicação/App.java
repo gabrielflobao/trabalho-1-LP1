@@ -61,6 +61,7 @@ public class App {
 				}
 
 			} while (!sair);
+			
 		} catch (Exception e) {
 			System.out.println("ERRO");
 		}
@@ -138,22 +139,21 @@ public class App {
 					break;
 
 				case 4:
-					System.out.print("Informe o nome: ");
-					sc.nextLine();
-					nome = sc.nextLine();
+
+					nome = JOptionPane.showInputDialog("Nome:");
 					System.out.println(ReservaAuxiliar.listarPorNome(nome));
 					break;
 
 				case 5:
-					System.out.print("Informe o CPF: ");
-					sc.nextLine();
-					CPF = sc.nextLine();
+
+					CPF = JOptionPane.showInputDialog("Informe o CPF: ");
 					System.out.println(ReservaAuxiliar.listarPorCPF(CPF));
 					break;
 
 				case 6:
 					ReservaAuxiliar.atualizar();
-					System.out.println("Lista de reservas atualizada com sucesso!");
+					JOptionPane.showMessageDialog(null, "Lista de reservas atualizada com sucesso",
+							"Reservas Atualizadas", 1);
 					System.out.println();
 					break;
 				case 0:
@@ -161,7 +161,7 @@ public class App {
 					break;
 
 				default:
-					System.out.println("Opção inválida!");
+					JOptionPane.showMessageDialog(null, "Opção inválida!", "ERROR", 0);
 					break;
 
 				}
