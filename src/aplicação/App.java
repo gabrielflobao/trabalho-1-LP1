@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 import entidades.Cliente;
 import entidades.Reserva;
 import entidades.auxiliares.ClienteAuxiliar;
@@ -19,14 +21,17 @@ public class App {
 		int op;
 		boolean sair = false;
 
-		String menu = "1 - Acessar opções sobre reserva\n" + "2 - Acessar opções sobre cliente\n"
-				+ "3 - Acessar opções sobre funcionário\n" + "0 - Finalizar o programa\n" + "Escolha uma opção: ";
+		String menu = JOptionPane.showInputDialog(null,
+				"1 - Acessar opções sobre reserva\n" + "2 - Acessar opções sobre cliente\n"
+						+ "3 - Acessar opções sobre funcionário\n" + "0 - Finalizar o programa\n"
+						+ "Escolha uma opção: ",
+				"OPÇÕES", 3);
 
 		try {
 			do {
 
 				System.out.print(menu);
-				op = sc.nextInt();
+				op = Integer.parseInt(menu);
 
 				System.out.println();
 
@@ -73,11 +78,12 @@ public class App {
 
 		try {
 			do {
-				System.out.print("1 - Adicionar uma nova reserva\n" + "2 - Excluir uma reserva\n"
-						+ "3 - Listar reservas\n" + "4 - Listar reservas por nome do cliente\n"
-						+ "5 - Listar reservas por CPF do cliente\n" + "6 - Atualizar lista de reservas\n"
-						+ "0 - Voltar ao menu principal\n" + "Escolha uma opção: ");
-				op = sc.nextInt();
+
+				op = (Integer.parseInt(JOptionPane.showInputDialog(null,
+						"\"1 - Adicionar uma nova reserva\n" + "2 - Excluir uma reserva \n" + "3 - Listar reservas \n"
+								+ "4 - Listar reservas por nome do cliente \n"
+								+ "5 - Listar reservas por CPF do cliente \n " + "6 - Atualizar lista de reservas \n"
+								+ "0 - Voltar ao menu principal\n" + "Escolha uma opção: \n")));
 
 				System.out.println();
 
@@ -88,42 +94,41 @@ public class App {
 
 					do {
 						System.out.print("Número do quarto: ");
-						num = sc.nextInt();
-						System.out.print("Data de entrada (dd/MM/yyyy): ");
-						dataInicio = sdf.parse(sc.next());
+						num = Integer.parseInt(JOptionPane.showInputDialog(null, "Número do quarto : "));
+						dataInicio = sdf
+								.parse(JOptionPane.showInputDialog(null, "Digite a data de entrada (dd/MM/yyyy)"));
+
 						pos = ReservaAuxiliar.buscarReservaComData(num, dataInicio);
 						if (pos != -1) {
+							JOptionPane.showInternalMessageDialog(null,
+									"Quarto não disponível para reserva, informe novamente", "Quarto Indisponível", 2);
 							System.out.println("Quarto não disponível para reserva, informe novamente");
 						}
 					} while (pos != -1);
 
 					do {
-						System.out.print("Data de saída (dd/MM/yyyy): ");
-						dataFim = sdf.parse(sc.next());
+						dataFim = sdf.parse(JOptionPane.showInputDialog(null, "Informe e data de saída(dd/MM/yyyy)"));
 						if (dataFim.before(dataInicio)) {
-							System.out.println("Data de saída deve ser igual ou posterior à data de entrada");
+							JOptionPane.showMessageDialog(null, "",
+									"Data de saída deve ser igual ou posterior à data de entrada", 0);
 						}
 					} while (dataFim.before(dataInicio));
 
-					System.out.print("Nome: ");
-					sc.nextLine();
-					nome = sc.nextLine();
-					System.out.print("CPF: ");
-					CPF = sc.nextLine();
-					System.out.print("Telefone: ");
-					telefone = sc.nextLine();
-
+					nome = JOptionPane.showInputDialog("Nome:");
+					CPF = JOptionPane.showInputDialog("CPF:");
+					telefone = JOptionPane.showInputDialog("Telefone:");
 					ReservaAuxiliar
 							.adicionarReserva(new Reserva(num, new Cliente(nome, CPF, telefone), dataInicio, dataFim));
+					JOptionPane.showMessageDialog(null, "Reserva Adicionada Com Sucesso!!!", "Reserva Adicionada", 1);
 					System.out.println();
 					break;
 
 				case 2:
-					System.out.print("Informe o número do quarto: ");
-					num = sc.nextInt();
-					System.out.print("Informe a data de entrada: ");
-					dataInicio = sdf.parse(sc.next());
+					num = Integer.parseInt(JOptionPane.showInputDialog(null, "Informe número do quarto : "));
+					dataInicio = sdf
+							.parse((JOptionPane.showInputDialog(null, "Informe a data de entrada: (dd/MM/yyyy)")));
 					ReservaAuxiliar.removerReserva(num, dataInicio);
+					JOptionPane.showMessageDialog(null, "Reserva Removida Com Sucesso!!!", "Reserva Adicionada", 1);
 					System.out.println();
 					break;
 
@@ -227,7 +232,7 @@ public class App {
 					} else {
 						System.out.println("CPF não cadastrado");
 					}
-					System.out.println();branch
+					System.out.println();
 					break;
 
 				case 5:
