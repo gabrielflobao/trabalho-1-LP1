@@ -1,0 +1,89 @@
+package SistemasOperacionais;
+
+import java.util.concurrent.Semaphore;
+
+public class IncrementaSaldo {
+	volatile int _saldo = 0; // Variável compartilhada
+	int _SALDO_FINAL = 100000;
+	int numThreads = 2;
+	boolean JUSTICA = true;
+	int MAX_TAREFAS = 1;
+
+	Semaphore semaforo = new Semaphore(MAX_TAREFAS, JUSTICA);
+
+	public void entrarSecaoCritica(int num_threads) {
+		boolean secaoCritica = false;
+		while (!secaoCritica) {
+			try {
+
+				semaforo.acquire();
+				secaoCritica = true;
+			} catch (Exception e) {
+
+			}
+		}
+		public void sairSecaoCritica(int num_threads) {
+			semaforo.release();
+		}
+	
+
+	public void sairSecaoCritica(int num_threads) {
+		this.secao_critica[num_threads] = false;
+	}
+
+	private class TipoDepositanteA extends Thread {
+		int numThread; // Armazena um código para identificar a thread
+
+		public TipoDepositanteA(int num) {
+			this.numThread = num;
+		}
+
+		public void run() {
+			int depositadoA = 0;
+			int valor_atual = 0;
+			do {
+				entrarSecaoCritica(numThread);
+				valor_atual = _saldo; // Seção crítica
+				_saldo = valor_atual + 1; // Seção crítica
+				sairSecaoCritica(numThread);
+				System.out.format("%04d \"Thread %d\"\n", valor_atual + 1, this.numThread);
+				depositadoA++;
+			} while (_saldo < _SALDO_FINAL);
+			System.out.format("Thread \"%d\" incrementou %04d de %04d\n", this.numThread, depositadoA, _SALDO_FINAL);
+		}
+	}
+
+	private class TipoDepositanteB extends Thread {
+		int numThread; // Armazena um código para identificar a thread
+
+		public TipoDepositanteB(int num) {
+			this.numThread = num;
+		}
+
+		public void run() {
+			int depositadoB = 0;
+			int valor_atual = 0;
+			do {
+				entrarSecaoCritica(numThread);
+				valor_atual = _saldo; // Seção crítica
+				_saldo = valor_atual + 1; // Seção crítica
+				sairSecaoCritica(numThread);
+				System.out.format("%04d \"Thread %d\"\n", valor_atual + 1, this.numThread);
+				depositadoB++;
+			} while (_saldo < _SALDO_FINAL);
+			System.out.format("Thread \"%d\" incrementou %04d de %04d\n", this.numThread, depositadoB, _SALDO_FINAL);
+		}
+	}
+
+	public IncrementaSaldo() {
+		System.out.format("Iniciando as Threads - Saldo total a decrementar: %04d \n", _SALDO_FINAL);
+		TipoDepositanteA ia = new TipoDepositanteA(0); // Esta será a thread Zero
+		TipoDepositanteB ib = new TipoDepositanteB(1); // Esta será a thread Um
+		ia.start();
+		ib.start();
+	}
+
+	public static void main(String[] args) {
+		IncrementaSaldo inc = new IncrementaSaldo();
+	}
+}

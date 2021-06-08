@@ -29,6 +29,10 @@ public class FuncionarioAuxiliar {
 		listaFuncionario.add(new Funcionario(nome, CPF, telefone));
 	}
 
+	public static void cadastrar(String nome, String CPF, String telefone, String login, String senha) {
+		listaFuncionario.add(new Funcionario(nome, CPF, telefone, login, senha));
+	}
+
 	public static void remover(String CPF) {
 		int pos = buscarPorCPF(CPF);
 		if (pos == -1) {

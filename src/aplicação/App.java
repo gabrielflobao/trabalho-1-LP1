@@ -1,5 +1,7 @@
 package aplicação;
 
+import java.awt.TrayIcon.MessageType;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -11,6 +13,9 @@ import entidades.Reserva;
 import entidades.auxiliares.ClienteAuxiliar;
 import entidades.auxiliares.FuncionarioAuxiliar;
 import entidades.auxiliares.ReservaAuxiliar;
+import util.BaseJson;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class App {
 
@@ -20,50 +25,77 @@ public class App {
 
 		int op;
 		boolean sair = false;
-
-		String menu = JOptionPane.showInputDialog(null,
-				"1 - Acessar opções sobre reserva\n" + "2 - Acessar opções sobre cliente\n"
-						+ "3 - Acessar opções sobre funcionário\n" + "0 - Finalizar o programa\n"
-						+ "Escolha uma opção: ",
-				"OPÇÕES", 3);
-
+		// criando usuário admin
 		try {
-			do {
+			JSONObject base = BaseJson.criarJson();
+			System.out.println("Json Criado!!");
+			String login = ((String) base.get("login"));
+			String senha = ((String) base.get("senha"));
+			String email = ((String) base.get("email"));
+			String cpf = ((String) base.get("cpf"));
+			String nome = ((String) base.get("nome"));
+			String telefone = ((String) base.get("telefone"));
+			FuncionarioAuxiliar.cadastrar(nome, cpf, telefone, login, senha);
 
-				System.out.print(menu);
-				op = Integer.parseInt(menu);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-				System.out.println();
+		String loginAutenticar;
+		String senhaAutenticar;
+		JOptionPane.showMessageDialog(null, "Informe os dados de restrição");
 
-				switch (op) {
+		loginAutenticar = JOptionPane.showInputDialog(null, "Infome o login", "login", 3);
+		senhaAutenticar = JOptionPane.showInputDialog(null, "Infome o senha", "senha", 3);
 
-				case 1:
-					menuReserva();
-					break;
+		if (FuncionarioAuxiliar.getListaFuncionario().get(0).autenticarFuncionario(loginAutenticar, senhaAutenticar)) {
+			JOptionPane.showMessageDialog(null, "Acesso Concedido");
+			String menu = JOptionPane.showInputDialog(null,
+					"1 - Acessar opções sobre reserva\n" + "2 - Acessar opções sobre cliente\n"
+							+ "3 - Acessar opções sobre funcionário\n" + "0 - Finalizar o programa\n"
+							+ "Escolha uma opção: ",
+					"OPÇÕES", 3);
 
-				case 2:
-					menuCliente();
-					break;
+			try {
+				while (!sair) {
 
-				case 3:
-					menuFuncionario();
-					break;
+					System.out.print(menu);
+					op = Integer.parseInt(menu);
 
-				case 0:
-					System.out.println("Programa finalizado!");
-					sair = true;
-					break;
+					System.out.println();
 
-				default:
-					System.out.println("Opção inválida!");
-					break;
+					switch (op) {
+
+					case 1:
+						menuReserva();
+						break;
+
+					case 2:
+						menuCliente();
+						break;
+
+					case 3:
+						menuFuncionario();
+						break;
+
+					case 0:
+						System.out.println("Programa finalizado!");
+						sair = true;
+						break;
+
+					default:
+						System.out.println("Opção inválida!");
+						break;
+
+					}
 
 				}
 
-			} while (!sair);
-			
-		} catch (Exception e) {
-			System.out.println("ERRO");
+			} catch (Exception e) {
+				System.out.println("ERRO");
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "Confira as informações e tente novamente");
 		}
 
 	}
@@ -78,6 +110,7 @@ public class App {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 		try {
+
 			do {
 
 				op = (Integer.parseInt(JOptionPane.showInputDialog(null,
@@ -139,7 +172,6 @@ public class App {
 					break;
 
 				case 4:
-
 					nome = JOptionPane.showInputDialog("Nome:");
 					System.out.println(ReservaAuxiliar.listarPorNome(nome));
 					break;
@@ -165,8 +197,8 @@ public class App {
 					break;
 
 				}
-			} while (!sair);
 
+			} while (!sair);
 		} catch (Exception e) {
 			System.out.println("ERRO");
 		}
@@ -181,39 +213,38 @@ public class App {
 
 		try {
 			do {
-				System.out.print("1 - Cadastrar novo cliente\n" + "2 - Remover cliente\n"
-						+ "3 - Listar todos os clientes\n" + "4 - Buscar cliente por CPF\n"
-						+ "5 - Listar clientes por nome\n" + "0 - Voltar ao menu principal\n" + "Escolha uma opção: ");
-				op = sc.nextInt();
+				op = (Integer.parseInt(JOptionPane.showInputDialog(null,
+						"1 - Cadastrar novo cliente\\n\" + \"2 - Remover cliente\\n\"\r\n"
+								+ "						+ \"3 - Listar todos os clientes\\n\" + \"4 - Buscar cliente por CPF\\n\"\r\n"
+								+ "						+ \"5 - Listar clientes por nome\\n\" + \"0 - Voltar ao menu principal\\n\" + \"Escolha uma opção: \"")));
 
 				System.out.println();
 
 				switch (op) {
 				case 1:
-					System.out.println("Informe os dados: ");
+					JOptionPane.showMessageDialog(null, "Informe os dados: ");
+
 					do {
 						System.out.print("CPF: ");
-						sc.nextLine();
-						CPF = sc.nextLine();
+						CPF = JOptionPane.showInputDialog("Informe o CPF: ");
 						pos = ClienteAuxiliar.buscarPorCPF(CPF);
 						if (pos != -1) {
-							System.out.println("CPF já cadastrado como cliente!");
+							CPF = JOptionPane.showInputDialog("CPF já cadastrado como cliente!");
+
 						}
 					} while (pos != -1);
-					System.out.print("Nome: ");
-					nome = sc.nextLine();
-					System.out.print("Telefone: ");
-					telefone = sc.nextLine();
+					nome = JOptionPane.showInputDialog("Informe o nome: ");
+					telefone = JOptionPane.showInputDialog("Informe o telefone: ");
 
 					ClienteAuxiliar.cadastrar(nome, CPF, telefone);
-					System.out.println("Cliente cadastrado com sucesso!");
-					System.out.println();
+					JOptionPane.showMessageDialog(null, "Cliente cadastrado com sucesso!");
+
 					break;
 
 				case 2:
 					System.out.print("Informe o CPF: ");
 					sc.nextLine();
-					CPF = sc.nextLine();
+					CPF = JOptionPane.showInputDialog("Informe o CPF: ");
 					ClienteAuxiliar.remover(CPF);
 					System.out.println();
 					break;
@@ -224,21 +255,19 @@ public class App {
 					break;
 
 				case 4:
-					System.out.print("Informe o CPF: ");
-					CPF = sc.next();
+					CPF = JOptionPane.showInputDialog("Informe o CPF: ");
 					pos = ClienteAuxiliar.buscarPorCPF(CPF);
 					if (pos != -1) {
 						System.out.println(ClienteAuxiliar.getListaCliente().get(pos));
 					} else {
-						System.out.println("CPF não cadastrado");
+						JOptionPane.showMessageDialog(null, "CPF não cadastrado");
+
 					}
 					System.out.println();
 					break;
 
 				case 5:
-					System.out.print("Informe o nome: ");
-					sc.nextLine();
-					nome = sc.nextLine();
+					nome = JOptionPane.showInputDialog("Informe o nome: ");
 					System.out.println(ClienteAuxiliar.listarPorNome(nome));
 					break;
 
@@ -266,12 +295,11 @@ public class App {
 
 		try {
 			do {
-
-				System.out.print("1 - Cadastrar novo funcionário\n" + "2 - Remover funcionário\n"
-						+ "3 - Listar todos os funcionários\n" + "4 - Buscar funcionário por CPF\n"
-						+ "5 - Listar funcionários por nome\n" + "0 - Voltar ao menu principal\n"
-						+ "Escolha uma opção: ");
-				op = sc.nextInt();
+				op = (Integer.parseInt(JOptionPane.showInputDialog(null,
+						"1 - Cadastrar novo funcionário\n" + "2 - Remover funcionário\n"
+								+ "3 - Listar todos os funcionários\n" + "4 - Buscar funcionário por CPF\n"
+								+ "5 - Listar funcionários por nome\n" + "0 - Voltar ao menu principal\n"
+								+ "Escolha uma opção: ")));
 
 				System.out.println();
 
@@ -279,18 +307,16 @@ public class App {
 				case 1:
 					System.out.println("Informe os dados: ");
 					do {
-						System.out.print("CPF: ");
-						sc.nextLine();
-						CPF = sc.nextLine();
+						
+						CPF = JOptionPane.showInputDialog("Informe o CPF: ");
 						pos = FuncionarioAuxiliar.buscarPorCPF(CPF);
 						if (pos != -1) {
 							System.out.println("CPF já cadastrado como funcionário!");
 						}
 					} while (pos != -1);
-					System.out.print("Nome: ");
-					nome = sc.nextLine();
-					System.out.print("Telefone: ");
-					telefone = sc.nextLine();
+
+					nome = JOptionPane.showInputDialog("Nome:");
+					telefone = JOptionPane.showInputDialog("Informe o telefone: ");
 
 					FuncionarioAuxiliar.cadastrar(nome, CPF, telefone);
 					System.out.println("Funcionário cadastrado com sucesso!");
@@ -298,9 +324,8 @@ public class App {
 					break;
 
 				case 2:
-					System.out.print("Informe o CPF: ");
-					sc.nextLine();
-					CPF = sc.nextLine();
+
+					CPF = JOptionPane.showInputDialog("Informe o CPF: ");
 					FuncionarioAuxiliar.remover(CPF);
 					System.out.println();
 					break;
@@ -311,8 +336,7 @@ public class App {
 					break;
 
 				case 4:
-					System.out.print("Informe o CPF: ");
-					CPF = sc.next();
+					CPF = JOptionPane.showInputDialog("Informe o CPF: ");
 					pos = FuncionarioAuxiliar.buscarPorCPF(CPF);
 					if (pos != -1) {
 						System.out.println(FuncionarioAuxiliar.getListaFuncionario().get(pos));
@@ -323,9 +347,8 @@ public class App {
 					break;
 
 				case 5:
-					System.out.print("Informe o nome: ");
-					sc.nextLine();
-					nome = sc.nextLine();
+
+					nome = JOptionPane.showInputDialog("Nome:");
 					System.out.println(FuncionarioAuxiliar.listarPorNome(nome));
 					break;
 
