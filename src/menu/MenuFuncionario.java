@@ -35,8 +35,9 @@ public class MenuFuncionario {
 
 					nome = JOptionPane.showInputDialog("Nome:");
 					telefone = JOptionPane.showInputDialog("Informe o telefone: ");
-
-					FuncionarioAuxiliar.cadastrar(nome, CPF, telefone);
+					String login = JOptionPane.showInputDialog("Informe o login: ");
+					String senha = JOptionPane.showInputDialog("Informe o senha:");
+					FuncionarioAuxiliar.cadastrar(nome, CPF, telefone, login, senha);
 					System.out.println("Funcionário cadastrado com sucesso!");
 					System.out.println();
 					break;

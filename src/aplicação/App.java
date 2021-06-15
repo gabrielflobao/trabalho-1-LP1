@@ -28,21 +28,16 @@ public class App {
 	public static void main(String[] args) {
 
 		// criando usuário admin
-		try {
-			JSONObject base = BaseJson.criarJson();
-			System.out.println("Json Criado!!");
-			String login = ((String) base.get("login"));
-			String senha = ((String) base.get("senha"));
-			String email = ((String) base.get("email"));
-			String cpf = ((String) base.get("cpf"));
-			String nome = ((String) base.get("nome"));
-			String telefone = ((String) base.get("telefone"));
+		
+			String login = "admin";
+			String senha = "admin";
+			String email = "admin";
+			String cpf = "admin";
+			String nome = "admin";
+			String telefone = "admin";
 			FuncionarioAuxiliar.cadastrar(nome, cpf, telefone, login, senha);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
+	
 		String loginAutenticar;
 		String senhaAutenticar;
 		JOptionPane.showMessageDialog(null, "Informe os dados de restrição");

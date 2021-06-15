@@ -14,9 +14,9 @@ public class MenuCliente {
 		try {
 			do {
 				op = (Integer.parseInt(JOptionPane.showInputDialog(null,
-						"1 - Cadastrar novo cliente\\n\" + \"2 - Remover cliente\\n\"\r\n"
-								+ "						+ \"3 - Listar todos os clientes\\n\" + \"4 - Buscar cliente por CPF\\n\"\r\n"
-								+ "						+ \"5 - Listar clientes por nome\\n\" + \"0 - Voltar ao menu principal\\n\" + \"Escolha uma opção: \"")));
+						"1 - Cadastrar novo cliente\n" + "2 - Remover cliente\n"
+								+ "						+ \"3 - Listar todos os clientes\n" + "4 - Buscar cliente por CPF \n"
+								+ "						+ \"5 - Listar clientes por nome\n" + "0 - Voltar ao menu principal\\n\" + \"Escolha uma opção: \"")));
 
 				System.out.println();
 
